@@ -12,6 +12,57 @@ Built with:
 - **TailwindCSS**
 - **Google Gen AI SDK** (`@google/genai`) using `gemini-2.5-flash`
 
+## Product Scope & Decisions
+
+### What we built (and why)
+
+This project focuses on the highest-value workflow for a confused buyer: **turn “I’m not sure what to buy” into a short, explainable shortlist**.
+
+- **Natural-language quiz filter (wizard)**: A minimal set of inputs (budget, body type, priority + optional fuel/seating) reduces decision fatigue while still capturing the highest-signal constraints.
+- **Top-3 shortlist + AI explanation**: Instead of dumping a long list, we pick the top 3 and ask Gemini to explain the trade-offs in plain language.
+- **Expert assistant panel**: A lightweight chat lets users ask follow-ups (e.g., “family trips”, “city driving”, “running costs”) while keeping the conversation grounded in the shortlisted JSON.
+
+This is high value because most buyers don’t need “all cars”; they need **confidence** and a **small set of options** with reasons.
+
+### What we deliberately cut (to stay focused)
+
+To keep the core recommendation loop strong (within a short build window), we intentionally **did not** build:
+- User accounts/auth and persistent saved shortlists
+- A database + admin panel for managing car inventory
+- Real-time scraping of dealer inventory / on-road pricing by city
+- Full spec normalization across trims/variants and verification of safety sources
+- Long multi-step onboarding or heavy comparison dashboards
+
+## Tech Stack Justification
+
+- **Next.js (App Router)**: Full-stack in one repo (UI + API routes), fast iteration, deploys cleanly to Vercel.
+- **TypeScript**: Strong typing for `Car`, match requests/responses, and chat payloads helps prevent API/UI drift.
+- **Tailwind CSS**: Rapid UI iteration with consistent styling; easy to ship a polished dark-mode aesthetic quickly.
+- **`@google/genai` (official SDK)**: Modern, supported Gemini SDK with straightforward server-side usage for both `/api/match` and `/api/chat`.
+
+This stack is honest and pragmatic: it’s what you can spin up instantly and still ship a real product end-to-end.
+
+## Agentic Tool Reflection
+
+### What was delegated vs. done manually
+
+- Delegated to AI tools:
+  - Tailwind layout scaffolding and component structuring for the wizard/results/chat panel
+  - Boilerplate for API route shapes and request/response typing
+  - Drafting copy for the hero + empty states
+- Done manually:
+  - The matching architecture (filtering, scoring, ranking) and the contract between UI ↔ API
+  - Error handling rules (ensuring 4xx only for malformed/invalid inputs; mapping upstream 503s in chat)
+  - Debugging PowerShell/npm friction and Windows-specific curl quoting issues
+
+### Where tools helped most
+
+They were most valuable in quickly producing **polished UI structure** (wizard + cards + assistant panel) and iterating copy/UX states without losing momentum.
+
+### Where tools got in the way (and how we fixed it)
+
+One recurring issue was **tooling assumptions on Windows/PowerShell** (e.g., quoting/escaping JSON in curl commands), which caused confusing “Malformed JSON” errors during manual testing. We stepped in by switching to **Node `fetch`-based smoke tests** and file-based payloads to ensure requests were valid and behavior was correct.
+
 ## Getting Started
 
 ### Prerequisites
