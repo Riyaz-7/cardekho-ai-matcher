@@ -17,7 +17,12 @@ export function CarResults({ data, onReset, onAdjust }: CarResultsProps) {
       <blockquote className="relative rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 pl-8">
         <div className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-gradient-to-b from-cyan-400 to-teal-500" />
         <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-cyan-400">
-          ✦ AI Advisor
+          ✦ AI Advisor{" "}
+          {data.aiUnavailable && (
+            <span className="ml-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-300">
+              temporarily unavailable
+            </span>
+          )}
         </p>
         <p className="text-base leading-relaxed text-zinc-300">{data.summary}</p>
       </blockquote>

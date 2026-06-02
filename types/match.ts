@@ -18,4 +18,5 @@ export interface MatchResponse {
   cars: Car[];
   summary: string;
   matchedCount: number;
+  aiUnavailable?: boolean;
 }

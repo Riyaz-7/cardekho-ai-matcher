@@ -41,6 +41,14 @@ function serverError(error: unknown) {
   return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 }
 
+function getUpstreamStatus(error: unknown): number | null {
+  if (!error || typeof error !== "object") return null;
+  const e = error as Record<string, unknown>;
+  const status = e.status;
+  if (typeof status === "number") return status;
+  return null;
+}
+
 export async function POST(request: Request) {
   let body: unknown;
 
@@ -77,12 +85,26 @@ export async function POST(request: Request) {
     }
 
     const topCars = rankCars(filtered, body.priority, 3);
-    const summary = await generateMatchSummary(body, topCars);
+    let summary = "";
+    let aiUnavailable = false;
+
+    try {
+      summary = await generateMatchSummary(body, topCars);
+    } catch (err) {
+      const upstream = getUpstreamStatus(err);
+      aiUnavailable = upstream === 503 || upstream === 429;
+      console.error("[POST /api/match] AI summary failed", err);
+
+      summary = aiUnavailable
+        ? "AI is temporarily unavailable right now (rate limit / high demand). Your top 3 shortlisted cars are still shown below — try again in a moment for the detailed AI explanation."
+        : "We shortlisted your top 3 cars, but the AI explanation failed to load. Please try again in a moment.";
+    }
 
     const response: MatchResponse = {
       cars: topCars.map(({ score: _score, ...car }) => car),
       summary,
       matchedCount: filtered.length,
+      ...(aiUnavailable ? { aiUnavailable: true } : {}),
     };
 
     return NextResponse.json(response);

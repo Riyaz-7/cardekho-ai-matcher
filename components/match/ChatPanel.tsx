@@ -51,7 +51,7 @@ export function ChatPanel({ cars }: { cars: Car[] }) {
 
     const json = (await response.json()) as ChatResponse & { error?: string };
     if (!response.ok) {
-      const isRetryable = response.status === 503;
+      const isRetryable = response.status === 503 || response.status === 429;
       setRetryable(isRetryable);
       setRetryPayload(isRetryable ? payload : null);
       throw new Error(json.error ?? "Chat failed. Please try again.");

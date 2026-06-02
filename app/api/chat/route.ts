@@ -12,7 +12,7 @@ function getUpstreamStatus(error: unknown): number | null {
   if (!error || typeof error !== "object") return null;
   const e = error as Record<string, unknown>;
   const status = e.status;
-  if (typeof status === "number" && status >= 500 && status <= 599) return status;
+  if (typeof status === "number") return status;
   return null;
 }
 
@@ -23,6 +23,12 @@ function serverError(error: unknown) {
     return NextResponse.json(
       { error: "AI is temporarily unavailable. Please try again in a moment." },
       { status: 503 },
+    );
+  }
+  if (upstream === 429) {
+    return NextResponse.json(
+      { error: "AI rate limit reached. Please wait a bit and retry." },
+      { status: 429 },
     );
   }
   return NextResponse.json({ error: "Internal server error" }, { status: 500 });
