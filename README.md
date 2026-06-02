@@ -181,6 +181,13 @@ Used by the “Expert assistant” panel in the results view.
 
 ## Roadmap
 
+### If I had another 4 hours
+
+- Add a **review/RAG layer**: index a small dataset of real user reviews (pros/cons) and retrieve relevant snippets per shortlisted car to make answers more grounded.
+- Add **interactive comparison charts**: a simple radar/bar view comparing safety, mileage/range, seating, and “performance score” for the 3 shortlisted cars.
+- Add a **quick financing widget**: EMI estimate + down payment slider to translate “₹X lakh budget” into a monthly cost decision.
+- Improve the matcher inputs: transmission preference, primary use-case (city/highway/family), and brand bias with transparent scoring weights.
+
 ### Near-term
 - Add **transmission preference** (manual/automatic) + brand preference
 - Show **“Why this car?”** per card (auto-generated, 1 sentence each)
