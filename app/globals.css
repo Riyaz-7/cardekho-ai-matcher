@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+:root {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --accent: #22d3ee;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Budget slider */
+.range-cyan {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: #3f3f46;
+  outline: none;
+}
+
+.range-cyan::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #22d3ee, #14b8a6);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
+}
+
+.range-cyan::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #22d3ee, #14b8a6);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
+}
+
+.range-cyan:disabled {
+  opacity: 0.5;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: card-in 0.5s ease-out both;
+}
+
+.fade-in {
+  animation-name: card-in;
+}
+
+.slide-in-from-bottom-4 {
+  /* combined in .animate-in */
+}
+
+.fill-mode-both {
+  animation-fill-mode: both;
+}
